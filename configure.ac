@@ -1,0 +1,24 @@
+AC_PREREQ(2.65)
+
+AC_INIT([libproxygen-urlrouter], [1.0], [rme@escaux.com])
+
+AM_INIT_AUTOMAKE([1.9 foreign])
+AC_CONFIG_MACRO_DIR([m4])
+
+AC_CONFIG_FILES([Makefile src/Makefile])
+
+PKG_PROG_PKG_CONFIG
+
+AC_LANG([C++])
+
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+AC_LIBTOOL_DLOPEN
+AX_CXX_COMPILE_STDCXX_14
+
+CXXFLAGS="-O3 -g -W -Wall -Wextra $CXXFLAGS"
+
+AC_OUTPUT
