@@ -49,12 +49,9 @@ Router::Router(std::vector<std::shared_ptr<AbstractRoute>> routes) :
 	}
 }
 
-void Router::onServerStart(folly::EventBase*) noexcept
-{
-}
+void Router::onServerStart(folly::EventBase*) noexcept { }
 
-void Router::onServerStop() noexcept {
-}
+void Router::onServerStop() noexcept { }
 
 RequestHandler* Router::onRequest(RequestHandler*, HTTPMessage* message) noexcept {
 	auto path = message->getURL();
@@ -62,7 +59,7 @@ RequestHandler* Router::onRequest(RequestHandler*, HTTPMessage* message) noexcep
 
 	auto method = message->getMethod();
 	if (method) {
-		entry.set_request_method(Route<void>::r3_method_from_proxygen(method.get()));
+		entry.set_request_method(AbstractRoute::r3_method_from_proxygen(method.get()));
 	}
 
 	r3::Route match = this->tree.match_route(entry);
