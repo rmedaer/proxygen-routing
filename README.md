@@ -5,6 +5,21 @@ This project implements a request routing system for
 It's using [libr3](https://github.com/c9s/r3) to match incoming HTTP request to `proxygen::RequestHandler`.
 If route is not found it returns a default handler: _404 - Not Found_.
 
+## Usage
+
+```cpp
+std::vector<std::shared_ptr<AbstractRoute>> routes = {
+	std::make_shared<Route<MyRouteHandler>>("/example", HTTPMethod::GET),
+	std::make_shared<Route<HelloHandler>>("/hello/{test}", HTTPMethod::GET)
+};
+
+HTTPServerOptions options;
+options.handlerFactories = RequestHandlerChain()
+	.addThen<Router>(routes)
+	.build();
+```
+
+
 ## Build and install
 The whole build process is not down but you might try the following:
 
@@ -22,4 +37,4 @@ The original idea comes from
 C++ templates, inheritance, etc.
 
 # License
-Apache-2.0 - Copyright 2016 Raphael Medaer <rme@escaux.com> 
+Apache-2.0 - Copyright 2016 Raphael Medaer <rme@escaux.com>
