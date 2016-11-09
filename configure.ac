@@ -21,4 +21,10 @@ AX_CXX_COMPILE_STDCXX_14
 
 CXXFLAGS="-O3 -g -W -Wall -Wextra $CXXFLAGS"
 
+LIBS="$LIBS -lr3 -lproxygenhttpserver -lglog -lgflags"
+
+AM_CPPFLAGS='-I/usr/include/r3'
+AM_CPPFLAGS="$AM_CPPFLAGS $CXX_FLAGS"
+AC_SUBST([AM_CPPFLAGS])
+
 AC_OUTPUT
