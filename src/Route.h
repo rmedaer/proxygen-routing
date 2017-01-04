@@ -1,6 +1,8 @@
 /*
     Copyright 2016 Raphael Medaer <rme@escaux.com>
 
+    This file is part of proxygen-routing (libproxygenrouting).
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,44 +15,33 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-#include "NotFoundHandler.hpp"
+
+#ifndef ROUTE_HPP
+#define ROUTE_HPP
+
+#include <string>
+
+#include "AbstractRoute.h"
 
 namespace proxygen {
 namespace routing {
 
-NotFoundHandler::NotFoundHandler(HTTPMessage*)
+template<typename T>
+class Route : public AbstractRoute
 {
-}
+public:
+    Route(HTTPMethod method, std::string path) :
+        AbstractRoute(method, path)
+    {
+    }
 
-void NotFoundHandler::onRequest(unique_ptr<HTTPMessage>) noexcept
-{
-}
-
-void NotFoundHandler::onBody(unique_ptr<IOBuf>) noexcept
-{
-}
-
-void NotFoundHandler::onEOM() noexcept
-{
-	ResponseBuilder(downstream_)
-	.status(404, "Not found")
-	.sendWithEOM();
-}
-
-void NotFoundHandler::onUpgrade(UpgradeProtocol) noexcept
-{
-}
-
-void NotFoundHandler::requestComplete() noexcept
-{
-	delete this;
-}
-
-void NotFoundHandler::onError(ProxygenError) noexcept
-{
-	delete this;
-}
-
+    virtual RequestHandler *handler(HTTPMessage* message, std::vector<std::string> params) const
+    {
+        return new T(message, params);
+    }
+};
 
 }
 }
+
+#endif // ROUTE_HPP

@@ -1,30 +1,24 @@
-AC_PREREQ(2.65)
+# Initialize autotools
+AC_PREREQ([2.69])
+AC_INIT([proxygenrouting], [1], [rme@escaux.com])
+AM_INIT_AUTOMAKE([foreign])
+LT_INIT
 
-AC_INIT([libproxygen-urlrouter], [1.0], [rme@escaux.com])
-
-AM_INIT_AUTOMAKE([1.9 foreign])
-AC_CONFIG_MACRO_DIR([m4])
-
-AC_CONFIG_FILES([Makefile src/Makefile])
-
-PKG_PROG_PKG_CONFIG
-
-AC_LANG([C++])
-
-AC_PROG_CXX
+# We are developing in C++11
 AC_PROG_CC
-AC_PROG_CPP
+AC_PROG_CXX
+AX_CHECK_COMPILE_FLAG([-std=c++1y], [CXXFLAGS="$CXXFLAGS -std=c++1y"])
+
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_LIBTOOL_DLOPEN
-AX_CXX_COMPILE_STDCXX_14
 
-CXXFLAGS="-O3 -g -W -Wall -Wextra $CXXFLAGS"
+# Check libraries and headers
+PKG_CHECK_MODULES(r3, r3)
 
-LIBS="$LIBS -lr3 -lproxygenhttpserver -lglog -lgflags"
+AC_CHECK_LIB([folly], [getenv], [], [AC_MSG_ERROR(
+    [Please install folly library])])
 
-AM_CPPFLAGS='-I/usr/include/r3'
-AM_CPPFLAGS="$AM_CPPFLAGS $CXX_FLAGS"
-AC_SUBST([AM_CPPFLAGS])
+AC_CHECK_LIB([proxygenhttpserver], [getenv], [], [AC_MSG_ERROR(
+    [Please install proxygen library])])
 
-AC_OUTPUT
+AC_OUTPUT([Makefile src/Makefile])
