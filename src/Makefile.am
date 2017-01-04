@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libproxygenrouting.la
 
-libproxygenrouting_ladir = $(includedir)/proxygen/routing
+libproxygenrouting_ladir = $(includedir)/proxygen/httpserver/routing
 libproxygenrouting_la_HEADERS = \
 				Router.h \
 				Route.h \
