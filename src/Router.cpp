@@ -120,7 +120,9 @@ Router::onRequest(
         return NULL;
     }
 
-    LOG(INFO) << "Routing \"" << path << "\"";
+    AbstractRoute *route = (AbstractRoute *) match.data();
+
+    LOG(INFO) << (*route);
 
     auto entry_ptr = entry.get();
     auto params = ParameterSet();
@@ -134,7 +136,7 @@ Router::onRequest(
 
         params.insert(make_pair(string(slug), string(token)));
     }
-    return ((AbstractRoute *) match.data())->handler(this, message, params);
+    return route->handler(this, message, params);
 }
 
 }

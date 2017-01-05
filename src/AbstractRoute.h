@@ -22,6 +22,7 @@
 #include <string>
 #include <map>
 #include <utility>
+#include <ostream>
 #include <proxygen/lib/http/HTTPMethod.h>
 #include <proxygen/lib/http/HTTPMessage.h>
 #include <proxygen/httpserver/RequestHandler.h>
@@ -50,6 +51,7 @@ public:
         method(method), path(path)
     {
     }
+
     virtual ~AbstractRoute()
     {
     }
@@ -71,7 +73,7 @@ public:
      *
      * \return const char *
      */
-    const char *c_path()
+    const char *c_path() const
     {
         return this->path.c_str();
     }
@@ -81,9 +83,31 @@ public:
      *
      * \return int
      */
-    int r3_method()
+    int r3_method() const
     {
         return AbstractRoute::proxygen_to_r3_method(this->method);
+    }
+
+    /*!
+     * \brief Return representing method string.
+     */
+    const string str_method() const
+    {
+        switch (method)
+        {
+            case HTTPMethod::GET:     return "GET";
+            case HTTPMethod::POST:    return "POST";
+            case HTTPMethod::OPTIONS: return "OPTIONS";
+            case HTTPMethod::DELETE:  return "DELETE";
+            case HTTPMethod::HEAD:    return "HEAD";
+            case HTTPMethod::PUT:     return "PUT";
+            default:                  return NULL;
+        }
+    }
+
+    const char *c_method() const
+    {
+        return this->str_method().c_str();
     }
 
     /*!
@@ -102,7 +126,17 @@ public:
             default:                  return 0;
         }
     }
+
 };
+
+    /*!
+     * \brief toString method.
+     */
+    ostream&
+    operator<< (ostream& stream, const AbstractRoute& route)
+    {
+        return stream << route.str_method() << ' ' << route.path;
+    }
 
 }
 }
