@@ -127,16 +127,17 @@ public:
         }
     }
 
-};
-
     /*!
      * \brief toString method.
      */
-    ostream&
+    friend ostream&
     operator<< (ostream& stream, const AbstractRoute& route)
     {
         return stream << route.str_method() << ' ' << route.path;
     }
+
+
+};
 
 }
 }
