@@ -20,13 +20,22 @@
 #define ABSTRACTROUTE_HPP
 
 #include <string>
+#include <map>
+#include <utility>
 #include <proxygen/lib/http/HTTPMethod.h>
 #include <proxygen/lib/http/HTTPMessage.h>
 #include <proxygen/httpserver/RequestHandler.h>
 #include <r3.hpp>
 
+using namespace std;
+
 namespace proxygen {
 namespace routing {
+
+using Parameter = pair<string, string>;
+using ParameterSet = map<string, string>;
+
+class Router;
 
 class AbstractRoute
 {
@@ -46,9 +55,16 @@ public:
     }
 
     /*!
-     * \brief Return handler associated to this route.
+     * \brief Instance new handler.
+     *
+     * \param router Upstream router. 
+     * \param message HTTP message.
+     * \param params a list of string from slugs.
      */
-    virtual RequestHandler *handler(HTTPMessage *message, std::vector<std::string> params) const = 0;
+    virtual RequestHandler *handler(
+        Router *router,
+        HTTPMessage *message,
+        ParameterSet params) const = 0;
 
     /*!
      * \brief Return C string from path.

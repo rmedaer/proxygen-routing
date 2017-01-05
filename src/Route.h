@@ -19,9 +19,9 @@
 #ifndef ROUTE_HPP
 #define ROUTE_HPP
 
-#include <string>
-
 #include "AbstractRoute.h"
+
+using namespace std;
 
 namespace proxygen {
 namespace routing {
@@ -35,9 +35,12 @@ public:
     {
     }
 
-    virtual RequestHandler *handler(HTTPMessage* message, std::vector<std::string> params) const
+    virtual RequestHandler *handler(
+        Router *router,
+        HTTPMessage* message,
+        ParameterSet params) const
     {
-        return new T(message, params);
+        return new T(router, message, params);
     }
 };
 

@@ -20,12 +20,15 @@
 #define ROUTER_HPP
 
 #include <memory>
-#include <vector>
+#include <map>
+#include <string>
 #include <r3.hpp>
 #include <folly/io/async/EventBase.h>
 #include <proxygen/httpserver/RequestHandlerFactory.h>
 
 #include "AbstractRoute.h"
+
+using namespace std;
 
 /* Nested namespace proxygen::routing */
 namespace proxygen {
@@ -40,15 +43,24 @@ namespace routing {
  */
 class Router : public RequestHandlerFactory
 {
+private:
     r3::Tree tree;
 
 public:
+    map<string, string> settings;
+
     /*!
      * \brief Router constructor; initialize a Router object.
      *
      * \param routes the routes/handlers to register.
      */
-    Router(std::vector<std::shared_ptr<AbstractRoute>> routes);
+    Router(vector<shared_ptr<AbstractRoute>> routes);
+
+    Router(vector<shared_ptr<AbstractRoute>> routes, map<string, string> settings);
+
+    void addRoute(vector<shared_ptr<AbstractRoute>> routes);
+
+    void addRoute(shared_ptr<AbstractRoute> route);
 
     /*!
      * \brief Compile r3::tree with given routes.
