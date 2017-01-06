@@ -27,6 +27,7 @@
 #include <proxygen/httpserver/RequestHandlerFactory.h>
 
 #include "AbstractRoute.h"
+#include "DefaultRouteHandler.h"
 
 using namespace std;
 

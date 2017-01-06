@@ -105,9 +105,8 @@ Router::onRequest(
     auto method = message->getMethod();
     if (!method)
     {
-        LOG(ERROR) << "Method not found in HTTPMessage";
-        // INTERNAL SERVER ERROR
-        return NULL;
+        LOG(ERROR) << "Method not found in HTTPMessage: " << path;
+        return new DefaultRouteHandler(500, "Internal Server Error");
     }
 
     entry.set_request_method(AbstractRoute::proxygen_to_r3_method(method.get()));
@@ -115,14 +114,13 @@ Router::onRequest(
     r3::Route match = this->tree.match_route(entry);
     if (!match)
     {
-        LOG(WARNING) << "Route not found";
-        // ROUTE NOT FOUND
-        return NULL;
+        LOG(WARNING) << "Route not found: " << path;
+        return new DefaultRouteHandler(404, "Not Found");
     }
 
     AbstractRoute *route = (AbstractRoute *) match.data();
 
-    LOG(INFO) << (*route);
+    LOG(INFO) << (*route) << ": " << path;
 
     auto entry_ptr = entry.get();
     auto params = ParameterSet();
